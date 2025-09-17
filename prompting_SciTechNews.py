@@ -5,7 +5,6 @@ import requests
 
 import pandas as pd
 from dotenv import load_dotenv
-from googlesearch import search
 from openai import OpenAI
 
 
@@ -16,19 +15,34 @@ logging.basicConfig(
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-# Doesn't work because Dataset scripts no longer supported
-# ds = load_dataset("ronaldahmed/scitechnews") 
-# Thus, have to convert to parquet files
-def convert_json_to_parquet(old_path, new_path): 
-    df = pd.read_json(old_path, lines=True)
-    df.to_parquet(new_path)
+# # Doesn't work because Dataset scripts no longer supported
+# # ds = load_dataset("ronaldahmed/scitechnews") 
+# # Thus, have to convert to parquet files
+# def convert_json_to_parquet(old_path, new_path): 
+#     df = pd.read_json(old_path, lines=True)
+#     df.to_parquet(new_path)
 
-# Load SciTechNews dataset as a parquet file
-df = pd.read_parquet("scitechnews_dataset/valid.parquet")
+# # Load SciTechNews dataset as a parquet file
+# df = pd.read_parquet("scitechnews_dataset/valid.parquet")
+
+
+# Load subsets of datasets 
+def load_datasets():
+    subset_names = ['computer_science', 'medicine', 'biology']
+    datasets = {}
+    for subset_name in subset_names:
+        datasets[subset_name] = json.load(open(f'datasets/{subset_name}_.json'))
+    
+    cs_df = pd.DataFrame(datasets['computer_science'])
+    med_df = pd.DataFrame(datasets['medicine'])
+    bio_df = pd.DataFrame(datasets['biology'])
+    
+    return cs_df, med_df, bio_df
+
 
 
 # Randomly sample from dataset
-def random_sampled_dataset(sample_size): 
+def random_sampled_dataset(df, sample_size): 
     sampled_ds = df.sample(sample_size, random_state=42)
     return sampled_ds
 
@@ -77,7 +91,7 @@ def extract_major_claim(text, client):
 
 # Retrieve relevant context from web using major claim
 def serper_search(claim):
-    api_key = os.getenv('SERPER_API_KEY')  # Store your key securely in env
+    api_key = os.getenv('SERPER_API_KEY') 
     url = "https://google.serper.dev/search"
     headers = {
         "X-API-KEY": api_key,
@@ -155,37 +169,35 @@ def evaluate_and_expand(row, client):
 def main():
     client = OpenAI(api_key=os.getenv("OPENAI_TOKEN"))
 
-    sample_size = 1
-    sampled_ds = random_sampled_dataset(sample_size)
-    preprocessed_ds = preprocess_data(sampled_ds)
+    # Load datasets
+    cs_df, med_df, bio_df = load_datasets()
+    df = pd.concat([cs_df, med_df, bio_df], ignore_index=True)
 
-    # Retrieval Augmentation
-    preprocessed_ds['major_claim'] = preprocessed_ds['sc-article'].apply(lambda text: extract_major_claim(text, client))
-    preprocessed_ds['retrieved_context'] = preprocessed_ds['major_claim'].apply(lambda claim: serper_search(claim))
 
-    # Prompting 
-    preprocessed_ds['prompt'] = preprocessed_ds.apply(create_prompt, axis=1)
-    preprocessed_ds['generated_news'] = preprocessed_ds['prompt'].apply(lambda row: generate_news_report_gpt(row, client))
+    # sample_size = 100
+    # sampled_ds = random_sampled_dataset(sample_size)
+    # preprocessed_ds = preprocess_data(sampled_ds)
 
-    # Evaluation
-    evaluation_scores = preprocessed_ds.apply(lambda row: evaluate_and_expand(row, client), axis=1)
-    preprocessed_ds = pd.concat([preprocessed_ds, evaluation_scores], axis=1)
 
-    preprocessed_ds.to_parquet('scitechnews_dataset/preprocessed_with_rag.parquet')
+    # # Retrieval Augmentation
+    # preprocessed_ds['major_claim'] = preprocessed_ds['sc-article'].apply(lambda text: extract_major_claim(text, client))
+    # preprocessed_ds['retrieved_context'] = preprocessed_ds['major_claim'].apply(lambda claim: serper_search(claim))
+
+    # # Prompting 
+    # preprocessed_ds['prompt'] = preprocessed_ds.apply(create_prompt, axis=1)
+    # preprocessed_ds['generated_news'] = preprocessed_ds['prompt'].apply(lambda row: generate_news_report_gpt(row, client))
+
+    # # Evaluation
+    # evaluation_scores = preprocessed_ds.apply(lambda row: evaluate_and_expand(row, client), axis=1)
+    # preprocessed_ds = pd.concat([preprocessed_ds, evaluation_scores], axis=1)
+
+    # preprocessed_ds.to_parquet('scitechnews_dataset/preprocessed_with_rag.parquet')
 
 
 
 if __name__ == "__main__": 
     main()
-    df = pd.read_parquet("scitechnews_dataset/preprocessed_with_rag.parquet")
-    # print(df.columns)
-    # print(df['retrieved_context'].iloc[0])
-    # print(df[['major_claim','retrieved_context']].head())
-
-    # print(df['generated_news'].iloc[0])
-    print(df['pr-article'].iloc[0])
-    # print(df[['factuality', 'relevance', 'attractiveness']].describe())
-
+    # df = pd.read_parquet("scitechnews_dataset/preprocessed_with_rag.parquet")
 
 
 
