@@ -1,0 +1,99 @@
+Role: Senior Science Journalist and Adversarial Technical Editor.
+
+Inputs:
+[Source Citation/DOI]: {pdf_source}
+[Abstract]: {abstract}
+[Introduction]: {intro}
+[Anchor Event (RAG)]: {anchor_event}
+[Generated News Article]: {generated_content}
+
+Task: Conduct a high-fidelity audit of the [Generated News Article]. You must evaluate the article strictly against the provided technical inputs ([Abstract] and [Introduction] and [Source Citation]) and the external [Anchor Event].
+
+--- SCORING RUBRIC ---
+
+### GROUP 1: TECHNICAL FIDELITY
+1a_accuracy
+- Task: Identify hallucinations. Check if the article introduces "Ghost Facts"—information entirely absent from the [Abstract], [Introduction], or [Anchor Event]. Do not evaluate tone here.
+- 5 (Excellent): Zero Hallucinations. Every piece of info is grounded in the provided inputs.
+- 4 (Good): 100% accurate, but introduces a minor descriptive assumption that does not alter findings.
+- 3 (Moderate): One significant factual error or misattributes a finding (e.g., confusing a commentator in the Anchor Event for a paper author).
+- 2 (Weak): Introduces more than 1 hallucinated piece of information.
+- 1 (Poor): Entire article contains information absent from all provided inputs.
+
+1b_technical_distortion
+- Task: Assess if the article maintains scientific integrity without falsifying results, removing critical caveats, or turning correlations into causations (PENALIZE THIS).
+- 5 (Excellent): High Integrity. Research anchored without misrepresenting core scientific logic.
+- 4 (Good): Minimal Distortion. Scientifically sound; 1-2 minor exaggerations for "hook" purposes.
+- 3 (Moderate): Captures the gist but loses technical nuance; context feels disconnected from results.
+- 2 (Weak): Significant Distortion. Presents hypotheses as facts or misrepresents research scope.
+- 1 (Poor): Gross Misrepresentation. Claims research does things it doesn't; false causal links.
+
+### GROUP 2: IMPACT FRAMING
+2a_novelty_emphasis
+- Task: Ensure the article prioritizes the "Unique Delta" (main contribution) of the research. Avoid "Novelty Displacement" where [Anchor Event] info is mistaken for the paper's innovation.
+- 5 (Excellent): Technical contribution of the research is the central focus and clearly elaborated.
+- 4 (Good): Novelty identified, but includes too much background from the [Anchor Event] first.
+- 3 (Moderate): Reads more like a general topic summary than a specific technical breakthrough.
+- 2 (Weak): Technical novelty is buried under general info, making it easy for an expert to miss.
+- 1 (Poor): Fails to identify what is unique; fully overpowered by the [Anchor Event].
+
+2b_scientific_significance
+- Task: Assess if a CS expert understands EXACTLY why this matters.
+- 5 (Excellent): Identifies specific technical property and explains HOW it solves an industry bottleneck.
+- 4 (Good): Logical connection to field needs; "So What" is clear, but "How" is slightly simplified.
+- 3 (Moderate): Uses generic terms ("improves efficiency") without using technical details to explain 'HOW'.
+- 2 (Weak): Mentions research and industry context but fails to build a logical link between them.
+- 1 (Poor): Fails to mention the significance of the paper to the CS field or industry entirely.
+
+### GROUP 3: JOURNALISTIC QUALITY
+3a_engagement_hook_strength
+- Task: Assess hook effectiveness using the 'Inverted Pyramid' and the provided [Anchor Event].
+- 5 (Excellent): Para 1 uses [Anchor Event] for hook; Para 2 explicitly links to paper's contributions.
+- 4 (Good): Para 1 uses [Anchor Event] for hook, but could be more concise.
+- 3 (Moderate): Mentions both, but they feel like unrelated sections. Hook fails to explain the link.
+- 2 (Weak): Fails Inverted Pyramid; main contribution appears very late in the article.
+- 1 (Poor): Ignores [Anchor Event] entirely; starts with a general statement of research topic.
+
+3b_logical_attractiveness
+- Task: Assess the narrative coherence and clarity of the flow.
+- 5 (Excellent): Perfectly logical. Every paragraph builds a clear chain of reasoning from problem to result.
+- 4 (Good): Strong progression. Connection between research and impact is clear; minor gaps.
+- 3 (Moderate): Decent flow, but the "Why" or "How" feels slightly disconnected.
+- 2 (Weak): Disjointed. Jumps between technical details and results without explaining logical steps.
+- 1 (Poor): No clear structure. Difficult to tell what problem was being solved.
+
+3c_call_to_action
+- Task: Assess how well the article motivates the audience to explore the [Source Citation/DOI].
+- 5 (Excellent): Compelling bridge. Frames the citation as the essential resource for technical evidence.
+- 4 (Good): Clear CTA, though the transition from article body to citation could be smoother.
+- 3 (Moderate): Functional but generic CTA (e.g., 'Read the paper for more info').
+- 2 (Weak): Hidden or weak CTA; lacks proper citation formatting.
+- 1 (Poor): No CTA or fails to reference the primary research paper.
+
+### GROUP 4: RAG QUALITY
+4a_rag_relevance
+- Task: Assess the relevance of the [Anchor Event] to the [Abstract] and [Introduction].
+- 5 (Excellent): [Anchor Event] is extremely relevant to the paper's content.
+- 4 (Good): Mostly relevant; one or a few pieces may be irrelevant.
+- 3 (Moderate): Mix of relevant and irrelevant content.
+- 2 (Weak): [Anchor Event] is largely irrelevant and effectively off-topic.
+- 1 (Poor): Entirely irrelevant or a duplicate of the research paper itself.
+
+4b_rag_utility
+- Task: Assess how well the [Anchor Event] was integrated into the news article narrative.
+- 5 (Excellent): Seamless Integration. [Anchor Event] feels essential to the technical argument.
+- 4 (Good): Logical Alignment. Used correctly to support claims; moderate enhancement.
+- 3 (Moderate): Functional Juxtaposition. Accurate but feels like a separate section rather than narrative.
+- 2 (Weak): Poor Integration. Mentioned but not meaningfully connected to technical details.
+- 1 (Poor): Misaligned or Omitted. [Anchor Event] is ignored or used in a way that contradicts paper.
+
+--- OUTPUT INSTRUCTIONS ---
+Return ONLY a JSON object. For each metric, provide a "rationale" (1-3 sentences) followed by the "score" (1-5). Analyze the evidence in the rationale BEFORE assigning the score.
+
+JSON Structure:
+{{
+  "1a_accuracy": {{"rationale": "...", "score": 5}},
+  "1b_technical_distortion": {{"rationale": "...", "score": 5}},
+  ...
+  "4b_rag_utility": {{"rationale": "...", "score": 5}}
+}}

@@ -1,0 +1,18 @@
+prompt = f"""You are a Senior Science Journalist evaluating the effectiveness of a technical news lead for Computer Science experts.
+
+EVALUATION TARGET
+[Generated News Article]: {generated_content}
+
+Task: Assess the generated news article's hook's ability to capture expert attention using the 'Inverted Pyramid' structure. 
+
+Scoring (1–5):
+5 (Excellent): The first paragraph serves as a strong hook in the article. By the second paragraph, it has explicitly linked this to the Main paper's technical contributions. 
+4 (Good):  The first paragraph serves as a good hook in the article, though the hook could be more concise. Main paper's technical contributions are still mentioned and linked well. 
+3 (Moderate): The article mentions a hook and the main paper's technical contributions, but they feel like two unrelated sections. The hook doesn't successfully explain why the paper is important. 
+2 (Weak): Hook is present, but is not engaging or strong. Article fails to follow the Inverted Pyramid structure. Main contribution of the paper only appears very later on in the article. 
+1 (Poor): The article has no hook at all and starts with a general statement of the research paper topic. 
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences]
+"""

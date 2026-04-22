@@ -1,0 +1,21 @@
+prompt = f"""You are a Senior Science Journalist evaluating the effectiveness of a technical news lead for Computer Science experts.
+
+SOURCE AUTHORITY (The Intended Hook):
+[Anchor Event]: {anchor_event}
+
+EVALUATION TARGET
+[Generated News Article]: {generated_content}
+
+Task: Assess the generated news article's hook's ability to capture expert attention using the 'Inverted Pyramid' structure and the provided [Anchor Event]. 
+
+Scoring (1–5):
+5 (Excellent): The first paragraph uses the specific Anchor Event for a strong hook in the article. By the second paragraph, it has explicitly linked this to the Main paper's technical contributions. 
+4 (Good):  The first paragraph uses the specific Anchor Event for a strong hook in the article, though the anchor event could be more concise. 
+3 (Moderate): The article mentions the Anchor Event and the Main Paper, but they feel like two unrelated sections. The "hook" doesn't successfully explain why the anchor event makes the paper important.
+2 (Weak): Anchor event is mentioned, but not engaging and strong. Article fails to follow the Inverted Pyramid structure. Main contribution of the paper only appears very later on in the article. 
+1 (Poor): The article ignores the provided Anchor Event entirely and starts with a general statement of the research paper topic. 
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences]
+"""
