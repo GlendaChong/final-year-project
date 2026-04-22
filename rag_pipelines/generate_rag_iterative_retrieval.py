@@ -43,7 +43,6 @@ def load_search_bank():
     return {}
 
 def save_to_search_bank(bank_data):
-    # Fix: Dynamically get the directory from the file path constant
     file_dir = os.path.dirname(SEARCH_RESULTS_FILE)
     if file_dir:
         os.makedirs(file_dir, exist_ok=True)
@@ -299,7 +298,6 @@ async def main():
             model_results = await asyncio.gather(*tasks)
             trace_results.extend([r for r in model_results if r])
 
-            # FIXED: Failure Autopsy Logic for your Report
             # Identifies cases where no snippets scored above 2
             failures = [r for r in model_results if all(s.get('score', 0) <= 2 for s in r['snippets_used'])]
             if failures:
