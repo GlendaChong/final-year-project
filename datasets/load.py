@@ -8,7 +8,7 @@ def main():
         for item in data:
             print(item.keys())  
             # print(item['article_title'] + '\n')
-            # print(item['article_content'] + '\n')
+            print(item['article_content'] + '\n')
             # print(item['paper_abstract'] + '\n')
             # print(item['paper_content'])
             input()

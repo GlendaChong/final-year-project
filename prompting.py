@@ -40,13 +40,31 @@ def scrape_metadata(url):
     return abstract, authors
 
 
+def get_info_from_paper(paper_body): 
+    # Extract Introduction 
+    # Extract Conclusion 
+    return 
+
+def create_rag_enhanced_prompt(abstract, authors, rag_system): 
+    return 
+
+
+
 def create_prompt(abstract, authors): 
     authors_joined = ", ".join(authors)
+    # prompt = (
+    #     f"Write a clear and engaging news report for the general public with non-technical background based on the following scientific abstract and author list:\n\n"
+    #     f"Abstract: {abstract}\n\n"
+    #     f"Authors: {authors_joined}\n"
+    # )
+
     prompt = (
-        f"Write a clear and engaging news report for the general public with non-technical background based on the following scientific abstract and author list:\n\n"
-        f"Abstract: {abstract}\n\n"
-        f"Authors: {authors_joined}\n"
+        "Your task is to write a clear, concise, and engaging news article for a general audience, based on the scientific abstract and author list.\n"
+        "• Avoid technical jargon—explain or omit complex terms.\n"
+        f"\n---\nABSTRACT:\n{abstract}\n\nAUTHORS: {authors_joined}\n---\n\n"
+        "Now write the news article."
     )
+
     return prompt
 
 
@@ -96,8 +114,8 @@ def main():
         })
 
     # Save as json file
-    version = 7
-    with open(f"generated_news_reports_{version}.json", "w") as f:
+    version = 8
+    with open(f"generated_news_reports/generated_news_reports_{version}.json", "w") as f:
         json.dump(combined_data, f, indent=4)
 
 

@@ -4,9 +4,6 @@
 3. Write a clear and engaging news report for the general public in about 250 words based only on the scientific abstract provided:
 4. Write a clear and engaging news report for the general public with non-technical background based only on the scientific abstract provided:
 5. Same as 4 but with LLaMa 8.3 model 
-6. 
-
-
 
 
 ## Additional Info Needed 
