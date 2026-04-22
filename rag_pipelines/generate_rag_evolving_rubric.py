@@ -155,7 +155,7 @@ def safe_parse_json(content):
 
 # --- PHASE 1: INITIALIZATION & HYPOTHESIS GEN ---
 async def phase_1_init(abstract, introduction, model_path):
-    # Matches "Analyze Paper -> Generate News Angle Search Rubrics"
+    # "Analyze Paper -> Generate News Angle Search Rubrics"
     prompt = f"""
     [Research Paper Abstract]: {abstract}
     [Research Paper Introduction]: {introduction}
@@ -198,7 +198,7 @@ def extract_rubrics(raw_response):
         else:
             data = {}
 
-    # 3. Handle the 'Schema.org' / nested 'text' issue seen in your logs
+    # 3. Handle the 'Schema.org' / nested 'text' issue seen in logs
     if "text" in data and isinstance(data["text"], str):
         # Recursively try to find JSON inside the 'text' string
         return extract_rubrics(data["text"])
@@ -286,7 +286,7 @@ async def phase_2_discovery_and_pivot(title, abstract, introduction, initial_que
                             break
                     continue
 
-                # Case D: string that starts with a number, e.g.
+                # Case D: string that starts with a number
                 if isinstance(item, str):
                     m = re.match(r"\s*(\d+)", item)
                     if m:
@@ -309,7 +309,7 @@ async def phase_2_discovery_and_pivot(title, abstract, introduction, initial_que
                     if 0 <= idx < len(search_hits):
 
                         current_hit = search_hits[idx]
-                        target_url = current_hit.get('link', '')  # Safer access to 'link'
+                        target_url = current_hit.get('link', '') 
                         
                         print(f"🔄 Round {attempt+1}, Scrape {rank+1}: {target_url}")
                         
@@ -362,7 +362,7 @@ async def phase_2_discovery_and_pivot(title, abstract, introduction, initial_que
         if results and len(results) > 0:
             best_result = results[0] # The top Google result
             
-            # We "promote" the snippet to be the 'full_content'
+            # Use the snippet as main full content instead
             ledger.anchor_event = {
                 "summary": best_result.get('title', 'No Title'),
                 "snippet": best_result.get('snippet', 'No Snippet'),
@@ -415,9 +415,6 @@ async def phase_2_discovery_and_pivot(title, abstract, introduction, initial_que
     return final_content_for_writer
 
 
-
-
-
 async def phase_3_drafting(row, ledger, model_path):
     abstract = row.get('Abstract', '')
     introduction = row.get('Introduction', '')
@@ -449,8 +446,8 @@ async def phase_3_drafting(row, ledger, model_path):
         1. SOURCE HIERARCHY: Every technical claim must be verifiable against the [Abstract], [Introduction], [Citation], and should be the main technical contribution of the paper. 
         2. NO DESCRIPTIVE INFERENCE: Do not add qualitative adjectives (e.g., "groundbreaking," "seamless," "critical") or industry status descriptors (e.g., "the next frontier") unless they are explicitly present in the sources.
         3. NO QUANTITATIVE ASSUMPTIONS: Do not estimate, quantify, or number processes (e.g., "a three-step method" or "several months") unless the specific number or duration is explicitly stated in the sources. 
-        4. ANCHOR INTEGRATION:The [Real-World Anchor Event] should be used as an engagement hook, but must not spill over into the technical breakdown of the paper in subsequent paragraphs.
-        5. TECHNICAL TERMINOLOGY: Use exact technical terminologies from the paper. Do not use "bridge" terms or analogies that introduce concepts not found in the original text.
+        4. ANCHOR INTEGRATION: The [Real-World Anchor Event] should be used as an engagement hook, but must not spill over into the technical breakdown of the paper in subsequent paragraphs.
+        5. TECHNICAL TERMINOLOGY: Use exact technical terminology from the paper. Do not use "bridge" terms or analogies that introduce concepts not found in the original text.
         6. STRUCTURE: Follow the Inverted Pyramid. Paragraph 1: Anchor Event. Paragraph 2: Main contributions of paper. Subsequent paragraphs: Technical deep-dive.
         7. Conclude with a motivated Call to Action to access the research paper. Frame the research paper as the main resource for obtaining more information that underpin these findings.
         8. Write like how human journalists write, not like how an academic abstract is structured. Use engaging language but do not sacrifice technical accuracy for the sake of storytelling.
@@ -505,7 +502,7 @@ async def phase_3_drafting(row, ledger, model_path):
         try:
             feedback = safe_parse_json(raw_content)
             if not feedback:
-                # This is your safety net for char 1 errors
+                # Safety net for char 1 errors
                 logging.error(f"🚨 Paper {row.get('row_index')}: Judge returned unparseable content. Skipping critique.")
                 feedback = {
                     "pass": True, 
@@ -527,7 +524,7 @@ async def phase_3_drafting(row, ledger, model_path):
             }
             ledger.history_log.append(round_entry)
             
-            # 3. BRANCHING: YES (Success) -> Output | NO (Critique) -> Evolution
+            # 3. BRANCHING: YES (Success) -> Output. NO (Critique) -> Evolution
             if is_passed:
                 print(f"✅ Draft Passed on Attempt {attempt + 1}!")
                 return draft
@@ -643,9 +640,7 @@ async def save_result(result, file_path):
         with open(temp_path, 'w') as f:
             json.dump(data, f, indent=4)
         
-        # Atomic rename ensures the file is never "half-written"
         os.replace(temp_path, file_path)
-
 
         
 async def main(file_path='extracted_papers_summary_5.json', model_file_prefix='rag_final/rag_generated_articles_evolving_rubric_full'):
@@ -674,7 +669,6 @@ async def main(file_path='extracted_papers_summary_5.json', model_file_prefix='r
         
         if tasks:
             print(f"🔬 STARTING: {alias.upper()}")
-            # Finish the whole list for GPT before moving to the next loop iteration
             await asyncio.gather(*tasks) 
         else:
             print(f"✅ {alias.upper()} is already done.")
