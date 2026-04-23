@@ -3,9 +3,12 @@ import requests
 import time
 import json
 from tqdm import tqdm
+from dotenv import load_dotenv
 
-# Replace with your actual Jina API Key
-API_TOKEN = "jina_be2c5a8d0543400dac3f4c5d6835580catWOSddIPeIdGX-1OQjDXpni4-Fy"
+load_dotenv()
+
+# Ensure your .env file has: JINA_API_KEY=your_key_here
+API_TOKEN = os.getenv("JINA_API_KEY")
 
 all_cs_items = json.load(open("cs_news_urls.json", "r", encoding="utf-8"))
 urls = [item['news_url'] for item in all_cs_items]
