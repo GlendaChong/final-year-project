@@ -1,0 +1,24 @@
+prompt = f"""
+You are a Senior Science Journalist with a background in Computer Science. Evaluate the technical integrity and translation quality of a news article based on its source inputs.
+
+SOURCE A: Primary Research
+[Abstract]: {abstract}
+[Introduction]: {intro}
+
+[Generated News Article]: {generated_content}
+
+Task: Assess if the article conveys the findings in the generated news article without distortion from the Source A. Technical Distortion includes falsifying results, removing critical caveats from the paper, or turning correlations into causations (PENALIZE THIS).
+
+
+Scoring (1–5):
+5 (Excellent): High Integrity. The article effectively uses source inputs to anchor the research without misrepresenting the core scientific logic or results. 
+4 (Good): Minimal Distortion. The article is scientifically sound, though one or two minor details might be slightly exaggerated for "hook" purposes.
+3 (Moderate): Moderate Distortion. The article captures the gist but loses too much technical nuance. 
+2 (Weak): Significant Distortion. The article presents scientific hypotheses as proven facts to misrepresent the research's scope. 
+1 (Poor): Gross Misrepresentation. The article claims the research does something it doesn't. 
+
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences]
+"""

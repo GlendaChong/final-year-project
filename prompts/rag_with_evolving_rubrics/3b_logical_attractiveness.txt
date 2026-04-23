@@ -1,0 +1,19 @@
+prompt = f"""You are evaluating the narrative coherence and clarity of a news article for a technical audience in the Computer Science field.
+
+EVALUATION TARGET
+[Generated News Article]
+{generated_content}
+
+Task: Assess the clarity and flow of the narrative in conveying the main message of the news article. 
+
+Scoring (1–5):
+5 (Excellent): Perfectly logical. Every paragraph builds on the previous one, creating a clear chain of reasoning from problem to result.
+4 (Good): Strong logical progression. The connection between the research and the impact is clear, with only minor gaps in explanation.
+3 (Moderate): Decent flow, but the "Why" or "How" feels slightly disconnected. The reader has to work to see how the solution fits the problem.
+2 (Weak): Disjointed. The article jumps between technical details and results without explaining the logical steps between them.
+1 (Poor): No clear structure. It is difficult to tell what problem was being solved or why the solution matters.
+
+Output format (strict):
+Score: [1–5]
+Rationale: [your brief explanation in 1–3 sentences]
+"""

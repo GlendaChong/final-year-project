@@ -1,0 +1,23 @@
+prompt = f"""You are a Senior Science Journalist evaluating how effectively a news article highlights the novelty of a scientific paper to Computer Science experts.
+
+SOURCE A: Technical Paper Authority
+[Abstract]: {abstract}
+[Introduction]: {intro}
+
+EVALUATION TARGET
+[Generated News Article]: {generated_content}
+
+Task: Assess whether the article identifies and prioritizes the "Unique Delta" (main contribution) as defined in Source A. 
+
+Scoring (1–5):
+5 (Excellent): The main technical contribution of the paper in Source A is the central focus of the generated news article and is clearly elaborated on in the generated news article.
+4 (Good): The main contribution is clearly identified, but the article includes a bit too much general background information before getting to the novelty.
+3 (Moderate): The main contribution is mentioned, but the article reads more like a general topic summary than a news article sharing the specific breakthrough.
+2 (Weak): The technical novelty is briefly mentioned but is buried under general information from the anchor event, making it easy for an expert to miss.
+1 (Poor): The article fails to identify what is actually new or unique about the research in Source A, and is fully overpowered by general background information. 
+
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences]
+"""

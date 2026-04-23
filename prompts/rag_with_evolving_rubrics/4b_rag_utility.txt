@@ -1,0 +1,22 @@
+utility_prompt = f"""
+You are an expert science editor. Evaluate the Utility and integration of external evidence within a generated news article.
+
+SOURCE A: External Context (Raw Evidence)
+[Anchor Event]: {anchor_event}
+
+EVALUATION TARGET
+[Generated News Article]: {generated_content}
+
+Task: Assess how well the external snippets was integrated into the news article.
+
+Scoring (1–5):
+5 (Excellent): Seamless Integration. The external context provide a critical real-world anchor that makes the research significantly more impactful and the external context feels like an essential part of the technical argument.
+4 (Good): Logical Alignment. The external context are used correctly to support technical claims. While the integration is clear and professional, the added context only provides a moderate or slight enhancement to the reader's understanding of the paper's core delta.
+3 (Moderate): Functional Juxtaposition. The external context is accurate and included, but it feels like a separate section rather than a cohesive part of the narrative.
+2 (Weak): Poor Integration. The external context is mentioned but not meaningfully explained or connected to the paper’s specific technical details. 
+1 (Poor): Misaligned or Omitted. The external context are either entirely ignored, used in a way that contradicts the research paper. 
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences]
+"""

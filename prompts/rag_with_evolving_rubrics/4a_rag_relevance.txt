@@ -1,0 +1,23 @@
+prompt = f"""You are evaluating the relevance of the retrieved information to the original scientific content. 
+
+SOURCE A: Technical Paper Authority
+[Abstract]: {abstract}
+[Introduction]: {intro}
+
+SOURCE B: Retrieved Information 
+{anchor_event}
+
+Task: Assess the relevance of the retrieved information to the original scientific content in Source A. 
+
+Scoring (1–5):
+5 (Excellent): Retrieved information is extremely relevant to Source A content. 
+4 (Good): Retrieved information is mostly relevant to Source A content, though one or a few pieces of information may be irrelevant. 
+3 (Moderate): Retrieved information contains a mix of relevant and irrelevant to Source A content. 
+2 (Weak): Retrieved information is largely irrelevant to Source A and effectively off-topic.
+1 (Poor): Retrieved information is entirely irrelevant to Source A or is simply a duplicate of the research paper itself—which fails the requirement for an external real-world anchor.
+
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences]
+"""

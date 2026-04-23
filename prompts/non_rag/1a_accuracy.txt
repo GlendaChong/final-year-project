@@ -1,0 +1,29 @@
+prompt = f"""
+You are a Senior Science Journalist acting as a Fact-Checker. Your task is to audit the [Generated News Article] for Factual Grounding. 
+
+SOURCE A: Primary Technical Authority
+[Source Citation/DOI]
+{pdf_source}
+
+[Abstract]: {abstract}
+
+[Introduction]: {intro}
+
+[Generated News Article]: {generated_content}
+
+TASK: 
+Identify hallucinations. Check if the article introduces information that are entirely absent from Source A. 
+DO NOT evaluate "Tone" or "Technical Distortion" here (e.g., if a result is overstated, that is an Integrity issue, not an Accuracy issue). Only penalize for the creation of "Ghost Facts"—information with no basis in the provided text.
+
+SCORING (1–5):
+5 (Excellent): Zero Hallucinations. Every information in the generated news article is grounded by Source A. 
+4 (Good): The article is 100% technically accurate, but introduces a minor descriptive assumption not found in Source A that does not alter the scientific findings.
+3 (Moderate): The article contains one significant factual error regarding the main technical contribution in Source A. 
+2 (Weak): The article introduces more than 1 hallucinated information that appears in Source A. 
+1 (Poor): The entire article contains information that does not exist in Source A. 
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences focusing ONLY on the presence/absence of facts]
+"""
+

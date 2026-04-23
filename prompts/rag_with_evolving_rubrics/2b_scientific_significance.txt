@@ -1,0 +1,32 @@
+prompt = f"""
+You are a Senior Science Journalist. Your task is to evaluate the "Scientific Significance" of a news article written for a Computer Science (CS) expert audience.
+
+SOURCE A: Technical Paper Authority (The 'How')
+[Abstract]: {abstract}
+[Intro]: {intro}
+
+SOURCE B: External Context/RAG Evidence (The 'Evidence')
+{anchor_event}
+
+EVALUATION TARGET
+[Generated News Article]: {generated_content}
+
+TASK:
+Assess whether the article effectively communicates the "So What?" of the technical innovation in Source A. The CS expert reader must understand EXACTLY why this specific research matters to them. 
+
+
+SCORING (1–5):
+5 (Excellent): The article explicitly identifies a specific technical property (e.g., a modular architecture or new algorithm) and explains exactly how it solves a known field-wide constraint or industry bottleneck. 
+
+4 (Good): The article identifies the research contribution and connects it logically to the field's needs. The "So What" is clear and grounded, though the technical "How" might be slightly simplified for narrative flow.
+
+3 (Moderate): The article claims significance using generic terms (e.g., "improves efficiency," "highly scalable") but fails to use specific technical details from Source A to explain the 'HOW.' The link is stated but not demonstrated.
+
+2 (Weak): The article mentions the research and the industry context/field needs, but fails to build a logical link between them. They feel like two unrelated summaries joined by a weak transition.
+
+1 (Poor): The article fails to mention the significance of the paper to the CS field or the industry context entirely. 
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences focusing on the Technical-to-Stakes alignment]
+"""

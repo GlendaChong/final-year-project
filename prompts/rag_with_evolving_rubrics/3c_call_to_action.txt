@@ -1,0 +1,22 @@
+prompt = f"""You are evaluating the effectiveness of the Call to Action (CTA) in a scientific news article for Computer Science experts.
+
+SOURCE AUTHORITY (The Paper to be Cited):
+[Source Citation/DOI]: {pdf_source}
+
+EVALUATION TARGET
+[Generated News Article]: {generated_content}
+
+Task: Assess how well the article motivates the expert audience to explore the full research paper.
+
+Scoring (1–5):
+5 (Excellent): Compelling and professional bridge. It frames the [Source Citation] as the essential resource for the technical evidence underpinning the findings.
+4 (Good): Clear Call to Action, though the transition from the article body to the citation could be smoother.
+3 (Moderate): Functional but generic CTA (e.g., 'Read the paper for more info').
+2 (Weak): Hidden or weak CTA that does not motivate further exploration or lacks proper citation formatting.
+1 (Poor): No Call to Action provided, or it fails to reference the primary research paper.
+
+Output format (strict):
+Score: [1–5]
+Rationale: [1–3 sentences]
+"""
+
